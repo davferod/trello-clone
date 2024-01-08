@@ -1,0 +1,41 @@
+<div class="flex flex-col h-screen">
+  <app-navbar></app-navbar>
+  <div class="w-full grow dark:bg-gray-500 p-6">
+    <div class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
+      <h1 class="text-xl text-gray-700 font-semibold italic mb-5">TABLE</h1>
+      <input type="search" [formControl]="input">
+      <table cdk-table [dataSource]="products()" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        @for (column of ColumnsFor; track column) {
+          <ng-container cdkColumnDef="{{column}}">
+            <th cdk-header-cell class="px-6 py-3" *cdkHeaderCellDef> {{column}} </th>
+            <td cdk-cell class="px-6 py-4" [ngClass]="{'bg-red-200': product[column] < 100}" *cdkCellDef="let product"> {{product[column]}} </td>
+            <td cdk-footer-cell class="px-6 py-3" *cdkFooterCellDef></td>
+          </ng-container>
+        }
+        <ng-container cdkColumnDef="images">
+          <th cdk-header-cell class="px-6 py-3" *cdkHeaderCellDef> Cover </th>
+          <td cdk-cell class="px-6 py-4" *cdkCellDef="let product">
+            <img class="w-10 h-10 rounded-full" [src]="product.images" alt="">
+          </td>
+          <td cdk-footer-cell class="px-6 py-3" *cdkFooterCellDef>{{total()}}</td>
+        </ng-container>
+        <ng-container cdkColumnDef="actions">
+          <th cdk-header-cell class="px-6 py-3" *cdkHeaderCellDef> Actions </th>
+          <td cdk-cell class="px-6 py-4" *cdkCellDef="let product">
+            <app-button
+            [color]="'primary'"
+            [typeBtn]="'button'"
+            (click)="updateProduct(product)"
+          >
+          update</app-button>
+          </td>
+          <td cdk-footer-cell class="px-6 py-3" *cdkFooterCellDef></td>
+        </ng-container>
+        <tr cdk-header-row class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400" *cdkHeaderRowDef="displayedColumns"></tr>
+        <tr cdk-row class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" *cdkRowDef="let product; columns: displayedColumns"></tr>
+        <tr cdk-footer-row class="text-xl text-gray-200 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400" *cdkFooterRowDef="displayedColumns">
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
